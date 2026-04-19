@@ -1,2 +1,3 @@
-# symptomtree
-SymptomTree.ai is a (agentic) health assistant designed to bridge the gap between subjective patient experiences and clinical-grade data.
+# Symptomtree.ai
+
+SymptomTree.ai is a (agentic) health assistant designed to bridge the gap between subjective patient experiences and clinical-grade data. By utilizing MedGemma (a medically tuned LLM), the platform allows users to log symptoms in natural language, which the AI then converts into structured medical data while asking targeted follow-up questions to clarify severity and patterns. Unlike static trackers, SymptomTree.ai serves as a proactive health partner with "memory”, correlating patient inputs with real-time data from wearables (like Apple Watch or Whoop). This creates a holistic, high-fidelity health diary that can be exported directly into clinician workflows via FHIR messages or PDF summaries.
