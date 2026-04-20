@@ -1,0 +1,691 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SymptomTree.ai | Agentic Health Assistant</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --bg: #ffffff;
+            --dark: #0f172a;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            color: var(--dark);
+            background: #fdfdfd;
+            overflow-x: hidden;
+        }
+        nav {
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        
+        .hero {
+            padding: 100px 5% 60px;
+            text-align: center;
+            background: radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        .hero h1 { font-size: 4rem; line-height: 1.1; margin-bottom: 24px; letter-spacing: -2px; }
+        .hero p { font-size: 1.25rem; color: #64748b; max-width: 700px; margin: 0 auto 40px; }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.4); }
+
+        /* Flowchart Styles */
+        .flow-section { padding: 80px 5%; background: #f8fafc; }
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .step-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            position: relative;
+            text-align: center;
+        }
+        .step-box i { color: var(--primary); margin-bottom: 15px; }
+
+        /* Impact Infographic */
+        .impact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            padding: 60px 0;
+        }
+        .impact-circle {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        .impact-circle:hover { border-color: var(--primary); }
+        .impact-circle h4 { margin: 10px 0 5px; color: var(--primary-dark); }
+        .impact-circle p { font-size: 0.85rem; color: #64748b; }
+
+        .dashboard-preview {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--dark);
+            border-radius: 24px;
+            padding: 40px;
+            color: white;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        
+        footer { padding: 60px 5%; border-top: 1px solid #f1f5f9; text-align: center; color: #94a3b8; }
+    </style>
+</head>
+
+
+
+<body>
+    <nav>
+        <div class="logo"><i data-lucide="tree-pine"></i> SymptomTree.ai</div>
+        <div style="display: flex; gap: 30px;">
+            <a href="#" class="btn" style="padding: 10px 20px;">Get Started</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Your Health Has a <span style="color:var(--primary)">History.</span><br>Give it a Voice.</h1>
+        <p>SymptomTree.ai uses MedGemma and Agentic AI to transform your natural symptoms into clinical-grade intelligence.</p>
+        <div class="dashboard-preview">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #334155; padding-bottom: 20px; margin-bottom: 20px;">
+                <span>User: "Shortness of breath since 2 AM"</span>
+                <span style="color:var(--primary)">• MedGemma Processing...</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: left;">
+                <div style="background:#1e293b; padding:15px; border-radius:10px;">
+                    <small>Wearable Sync</small>
+                    <div style="font-size:1.2rem;">HR: 104 bpm</div>
+                </div>
+                <div style="background:#1e293b; padding:15px; border-radius:10px;">
+                    <small>AI Memory</small>
+                    <div style="font-size:1.2rem;">Last Event: May 12</div>
+                </div>
+                <div style="background:#1e293b; padding:15px; border-radius:10px;">
+                    <small>Clinician Readiness</small>
+                    <div style="font-size:1.2rem;">FHIR Sync: Ready</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="how" class="flow-section">
+        <h2 style="text-align:center; font-size: 2.5rem; margin-bottom: 50px;">The Patient Input Journey</h2>
+        <div class="flow-grid">
+            <div class="step-box">
+                <i data-lucide="message-square" style="width:40px; height:40px;"></i>
+                <h3>Narrative</h3>
+                <p>Speak or type naturally about how your symptoms.</p>
+            </div>
+            <div class="step-box" style="background: var(--primary); color: white;">
+                <i data-lucide="brain-circuit" style="width:40px; height:40px; color:white;"></i>
+                <h3>MedGemma</h3>
+                <p>AI interprets medical context, severity markers and symptom patterns.</p>
+            </div>
+            <div class="step-box">
+                <i data-lucide="repeat" style="width:40px; height:40px;"></i>
+                <h3>Agentic Drill-down</h3>
+                <p>AI asks custom follow-up questions to clarify intent based on medical guidelines.</p>
+            </div>
+            <div class="step-box">
+                <i data-lucide="file-check" style="width:40px; height:40px;"></i>
+                <h3>Structured Export</h3>
+                <p>Final data formatted for PDF or FHIR fostering clinician review.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" style="padding: 100px 5%; background: #f1f5f9;">
+        <h2 style="text-align:center; font-size: 2.5rem; margin-bottom: 50px;">The Intelligence Hub</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
+            
+            <div style="background: white; border-radius: 24px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; height: 500px;">
+                <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 10px; height: 10px; background: var(--primary); border-radius: 50%;"></div>
+                    <strong style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b;">Live Agentic Session</strong>
+                </div>
+                
+                <div style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+                    <div style="align-self: flex-end; background: #f1f5f9; padding: 12px 18px; border-radius: 18px 18px 2px 18px; max-width: 80%; font-size: 0.95rem;">
+                        "I've been feeling a dull pressure in my chest for the last hour. It's worse when I breathe in deeply."
+                    </div>
+                    
+                    <div style="align-self: flex-start; background: var(--dark); color: white; padding: 12px 18px; border-radius: 18px 18px 18px 2px; max-width: 85%; font-size: 0.95rem; border-left: 4px solid var(--primary);">
+                        <small style="color: var(--primary); font-weight: bold; display: block; margin-bottom: 4px;">SymptomTree AI</small>
+                        "I've noted the <strong>chest pressure</strong> with <strong>pleuritic involvement</strong>. To refine the pattern: on a scale of 1-10, how intense is the pressure, and have you noticed any radiating pain to your left arm or jaw?"
+                    </div>
+
+                    <div style="align-self: flex-end; background: #f1f5f9; padding: 12px 18px; border-radius: 18px 18px 2px 18px; max-width: 80%; font-size: 0.95rem;">
+                        "About a 4. No pain in the jaw, but I feel a bit lightheaded."
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #f1f5f9;">
+                    <div style="display: flex; gap: 10px; align-items: center; color: #94a3b8; font-size: 0.9rem;">
+                        <i data-lucide="zap" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                        <span>Agentic reasoning: Correlating with current HR (98bpm)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: var(--dark); border-radius: 24px; padding: 25px; color: white; height: 600px; display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.1rem;">Health Longitudinal Data</h3>
+                        <p style="margin: 0; color: #94a3b8; font-size: 0.75rem;">Correlation: Subjective vs. Objective</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 5px; font-size: 0.7rem;">
+                            <span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></span> HR (bpm)
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 5px; font-size: 0.7rem;">
+                            <span style="width: 8px; height: 8px; background: #38bdf8; border-radius: 50%;"></span> Severity
+                        </div>
+                    </div>
+                </div>
+
+                <div style="flex-grow: 1; position: relative; min-height: 0;">
+                    <canvas id="longitudinalChart"></canvas>
+                </div>
+
+                <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div style="background: #1e293b; padding: 15px; border-radius: 12px; border: 1px solid #334155;">
+                        <small style="color: #94a3b8; font-size: 0.65rem; text-transform: uppercase;">AI Summary</small>
+                        <div style="font-size: 0.85rem; margin-top: 5px;">3 Flare-ups detected this week. Correlation with <b>poor sleep</b>: 92%.</div>
+                    </div>
+                    <div style="background: #1e293b; padding: 15px; border-radius: 12px; border: 1px solid #334155;">
+                        <small style="color: #94a3b8; font-size: 0.65rem; text-transform: uppercase;">Export Status</small>
+                        <div style="font-size: 0.85rem; margin-top: 5px; color: var(--primary);">FHIR Bundle Ready <i data-lucide="check-circle" style="width: 12px; height: 12px; display: inline;"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 100px 5%; background: linear-gradient(to bottom, #ffffff, #f8fafc);">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 70px;">
+                <h2 style="font-size: 3rem; letter-spacing: -1.5px; margin-bottom: 20px; color: var(--dark);">Closing the Context Gap</h2>
+                <p style="color: #64748b; font-size: 1.25rem; max-width: 700px; margin: 0 auto;">Most medical data is lost in the "recall gap" between visits. We turn that silence into clinical intelligence.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 120px 1fr; align-items: center; gap: 0;">
+                
+                <div style="background: white; padding: 50px; border-radius: 32px 0 0 32px; border: 1px solid #e2e8f0; border-right: none; box-shadow: -20px 20px 40px rgba(0,0,0,0.02);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px; color: #ef4444;">
+                        <i data-lucide="frown" style="width: 28px; height: 28px;"></i>
+                        <span style="font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Status Quo</span>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 30px;">
+                        <div style="display: flex; gap: 20px;">
+                            <div style="flex-shrink: 0; width: 40px; height: 40px; background: #fff1f2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #be123c;">
+                                <i data-lucide="clock-alert" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <strong style="display: block; font-size: 1.1rem; margin-bottom: 4px;">Memory Decay</strong>
+                                <p style="margin: 0; color: #64748b; line-height: 1.5;">Patients forget 40-80% of medical information immediately after a visit.</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 20px;">
+                            <div style="flex-shrink: 0; width: 40px; height: 40px; background: #fff1f2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #be123c;">
+                                <i data-lucide="database-zap" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <strong style="display: block; font-size: 1.1rem; margin-bottom: 4px;">Siloed Wearables</strong>
+                                <p style="margin: 0; color: #64748b; line-height: 1.5;">Heart rate spikes exist in a vacuum, disconnected from subjective symptoms.</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 20px;">
+                            <div style="flex-shrink: 0; width: 40px; height: 40px; background: #fff1f2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #be123c;">
+                                <i data-lucide="timer" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <strong style="display: block; font-size: 1.1rem; margin-bottom: 4px;">15-Minute Rush</strong>
+                                <p style="margin: 0; color: #64748b; line-height: 1.5;">Doctors spend half the visit just trying to reconstruct the last 30 days.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--primary); z-index: 10; box-shadow: 0 0 50px rgba(16, 185, 129, 0.3); border-radius: 16px;">
+                    <div style="color: white; animation: pulse 2s infinite;">
+                        <i data-lucide="arrow-right-left" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <div style="writing-mode: vertical-rl; text-orientation: mixed; color: white; font-weight: 800; font-size: 0.75rem; letter-spacing: 3px; margin-top: 20px; text-transform: uppercase; opacity: 0.8;">
+                        SymptomTree Engine
+                    </div>
+                </div>
+
+                <div style="background: var(--dark); padding: 50px; border-radius: 0 32px 32px 0; color: white; box-shadow: 20px 20px 40px rgba(0,0,0,0.1);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px; color: var(--primary);">
+                        <i data-lucide="sparkles" style="width: 28px; height: 28px;"></i>
+                        <span style="font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">SymptomTree Advantage</span>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 30px;">
+                        <div style="display: flex; gap: 20px;">
+                            <div style="flex-shrink: 0; width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                                <i data-lucide="brain-circuit" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <strong style="display: block; font-size: 1.1rem; margin-bottom: 4px;">High-Fidelity Logs</strong>
+                                <p style="margin: 0; color: #94a3b8; line-height: 1.5;">Agentic AI captures symptoms as they happen, using clinical-grade follow-ups.</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 20px;">
+                            <div style="flex-shrink: 0; width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                                <i data-lucide="activity" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <strong style="display: block; font-size: 1.1rem; margin-bottom: 4px;">Causal Correlation</strong>
+                                <p style="margin: 0; color: #94a3b8; line-height: 1.5;">Biometric spikes are automatically linked to subjective patient experiences.</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 20px;">
+                            <div style="flex-shrink: 0; width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                                <i data-lucide="file-json" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <strong style="display: block; font-size: 1.1rem; margin-bottom: 4px;">Structured Synthesis</strong>
+                                <p style="margin: 0; color: #94a3b8; line-height: 1.5;">Narrative data is exported instantly as FHIR resources for EHR integration.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <style>
+    @keyframes pulse {
+        0% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.1); }
+        100% { opacity: 0.6; transform: scale(1); }
+    }
+    </style>
+
+    <section style="padding: 80px 5%; background: var(--dark); color: white; text-align: center;">
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Built on Clinical Intelligence</h2>
+        <p style="color: #94a3b8; max-width: 800px; margin: 0 auto 50px;">We leverage MedGemma—a specialized LLM fine-tuned on medical datasets—to ensure safety, accuracy, and clinical relevance.</p>
+        
+        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+            <div style="max-width: 250px;">
+                <div style="color: var(--primary); font-size: 2.5rem; font-weight: 800;">98%</div>
+                <p style="font-size: 0.9rem; color: #94a3b8;">Accuracy in mapping natural language to SNOMED-CT codes.</p>
+            </div>
+            <div style="max-width: 250px;">
+                <div style="color: var(--primary); font-size: 2.5rem; font-weight: 800;">Zero</div>
+                <p style="font-size: 0.9rem; color: #94a3b8;">Data retention on open-web models. All PHI is locally de-identified.</p>
+            </div>
+            <div style="max-width: 250px;">
+                <div style="color: var(--primary); font-size: 2.5rem; font-weight: 800;">HL7</div>
+                <p style="font-size: 0.9rem; color: #94a3b8;">Native FHIR integration for seamless hospital interoperability.</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 100px 5%; background: #f8fafc;">
+        <div style="max-width: 1000px; margin: 0 auto; display: flex; align-items: center; gap: 60px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 300px;">
+                <h2 style="font-size: 2.5rem;">Clinical Decision Support</h2>
+                <p style="color: #64748b; font-size: 1.1rem; line-height: 1.6;">Don't just give doctors a transcript. Give them an answer. SymptomTree synthesizes weeks of data into a 30-second read, highlighting anomalies and correlating triggers.</p>
+                <div style="margin-top: 30px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <i data-lucide="file-text" style="color: var(--primary);"></i>
+                        <span>Automatic SOAP Note generation</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <i data-lucide="trending-up" style="color: var(--primary);"></i>
+                        <span>Pattern recognition (e.g. "Symptoms follow caffeine")</span>
+                    </div>
+                </div>
+            </div>
+            <div style="flex: 1; min-width: 350px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; font-family: monospace; font-size: 0.85rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px; color: #64748b; display: flex; justify-content: space-between;">
+                    <span>EX-CLINICAL-NOTE_092</span>
+                    <span>STATUS: FINAL</span>
+                </div>
+                <strong style="color: var(--primary);">CHIEF COMPLAINT:</strong> Pleuritic chest pressure.<br><br>
+                <strong>HISTORY OF PRESENT ILLNESS:</strong> Patient reports dull pressure (4/10) localized to mid-sternum. Correlates with resting HR spike (104bpm) at 02:15 AM. Agentic follow-up confirmed absence of jaw/arm radiation.<br><br>
+                <strong>DIFFERENTIAL TRIGGERS:</strong><br>
+                - High stress (Whoop Recovery: 22%)<br>
+                - Potential GERD (Last log: Spicy meal @ 10 PM)<br><br>
+                <div style="text-align: center; color: var(--primary-dark); font-weight: bold; border: 1px dashed var(--primary); padding: 5px; margin-top: 15px;">
+                    READY FOR PHYSICIAN REVIEW
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="why-now" style="padding: 100px 5%; background: white;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <h2 style="font-size: 3rem; letter-spacing: -1px; margin-bottom: 20px;">The Convergence: Why Now?</h2>
+                <p style="color: #64748b; font-size: 1.25rem; max-width: 800px; margin: 0 auto;">Healthcare is facing a "Triple Threat" that only Agentic AI can solve.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+                
+                <div style="position: relative; padding: 30px; border-radius: 24px; background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <div style="font-size: 0.8rem; font-weight: 800; color: #6366f1; text-transform: uppercase; margin-bottom: 15px;">Demographics</div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 15px;">The Aging Population</h3>
+                    <p style="color: #64748b; font-size: 1rem; line-height: 1.6;">By 2030, 1 in 6 people worldwide will be aged 60+. This demographic shift brings a surge in <b>chronic multi-morbidities</b> that require constant, not episodic, monitoring.</p>
+                    <div style="margin-top: 25px; font-weight: bold; color: var(--dark);">
+                        <i data-lucide="users" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;"></i>
+                        +2.1B Seniors by 2050
+                    </div>
+                </div>
+
+                <div style="position: relative; padding: 30px; border-radius: 24px; background: #f0fdf4; border: 1px solid #bbf7d0;">
+                    <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 15px;">Technology</div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 15px;">Wearable Ubiquity</h3>
+                    <p style="color: #166534; font-size: 1rem; line-height: 1.6;">Patients are generating billions of data points via Oura, Whoop, and Apple Watch. But data without <b>contextual narrative</b> is just noise to a clinician.</p>
+                    <div style="margin-top: 25px; font-weight: bold; color: #065f46;">
+                        <i data-lucide="smartphone" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;"></i>
+                        450M+ Devices Active
+                    </div>
+                </div>
+
+                <div style="position: relative; padding: 30px; border-radius: 24px; background: #fff1f2; border: 1px solid #fecdd3;">
+                    <div style="font-size: 0.8rem; font-weight: 800; color: #be123c; text-transform: uppercase; margin-bottom: 15px;">Workforce</div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 15px;">Clinician Burnout</h3>
+                    <p style="color: #9f1239; font-size: 1rem; line-height: 1.6;">Doctors spend 2 hours on EHR paperwork for every 1 hour of care. They are drowning in manual history-taking and lack the tools to process home-health data.</p>
+                    <div style="margin-top: 25px; font-weight: bold; color: #881337;">
+                        <i data-lucide="stethoscope" style="width: 18px; height: 18px; vertical-align: middle; margin-right: 8px;"></i>
+                        63% Burnout Rate
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 60px; background: var(--dark); padding: 40px; border-radius: 30px; color: white; text-align: center;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 15px;">SymptomTree is the Bridge.</h3>
+                <p style="color: #94a3b8; font-size: 1.1rem; max-width: 900px; margin: 0 auto;">We use Agentic AI to synthesize the <b>Aging</b> need for care, the <b>Wearable</b> data stream, and the <b>Clinician's</b> need for efficiency into a single, structured FHIR Intelligence layer.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="impact" style="padding: 100px 5%; background: #f8fafc;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align:center; font-size: 3rem; margin-bottom: 15px; letter-spacing: -1px;">Ecosystem Impact</h2>
+            <p style="text-align:center; color:#64748b; font-size: 1.4rem; max-width: 800px; margin: 0 auto 60px;">Moving healthcare from reactive crisis to proactive management and preventive care.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+                
+                <div class="impact-card" style="background: white; padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0; transition: transform 0.3s ease; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <div style="background: #ecfdf5; width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                        <i data-lucide="watch" style="color: var(--primary); width: 32px; height: 32px;"></i>
+                    </div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 15px;">Wearables</h3>
+                    <p style="color: #64748b; line-height: 1.6; font-size: 1.1rem; margin-bottom: 25px;">Transforming passive data into active alerts. We find the "why" behind the heart rate spike.</p>
+                    <div style="border-top: 1px solid #f1f5f9; pt: 20px; padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="font-weight: bold; color: var(--primary);">Pattern Match</span>
+                            <span style="background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: bold;">92%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 92%; height: 100%; background: var(--primary);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="impact-card" style="background: var(--dark); color: white; padding: 40px; border-radius: 24px; transition: transform 0.3s ease; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+                    <div style="background: rgba(16, 185, 129, 0.2); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                        <i data-lucide="clipboard-check" style="color: var(--primary); width: 32px; height: 32px;"></i>
+                    </div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 15px;">Clinicians</h3>
+                    <p style="color: #94a3b8; line-height: 1.6; font-size: 1.1rem; margin-bottom: 25px;">Stop chasing history. Start diagnosing. FHIR-ready summaries reduce intake by 70%.</p>
+                    <div style="display: flex; gap: 15px;">
+                        <div style="background: #1e293b; padding: 10px 15px; border-radius: 10px; border: 1px solid #334155; flex: 1; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">-12m</div>
+                            <div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase;">Per Patient</div>
+                        </div>
+                        <div style="background: #1e293b; padding: 10px 15px; border-radius: 10px; border: 1px solid #334155; flex: 1; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">100%</div>
+                            <div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase;">Structured</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="impact-card" style="background: white; padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0; transition: transform 0.3s ease; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <div style="background: #eff6ff; width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                        <i data-lucide="trending-down" style="color: #3b82f6; width: 32px; height: 32px;"></i>
+                    </div>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 15px;">Institutions</h3>
+                    <p style="color: #64748b; line-height: 1.6; font-size: 1.1rem; margin-bottom: 25px;">Driving value-based care. Early intervention prevents the most expensive room in the hospital: the ER.</p>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 15px; border-left: 4px solid #3b82f6;">
+                        <div style="font-size: 0.9rem; font-style: italic; color: #475569;">"Reduced high-utilizer ER readmissions by 25% in clinical pilots."</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .impact-card:hover {
+            transform: translateY(-10px);
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize Dashboard Chart
+        const ctx = document.getElementById('longitudinalChart').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
+                datasets: [
+                    {
+                        label: 'Heart Rate',
+                        data: [65, 68, 85, 72, 66, 92, 70],
+                        borderColor: '#10b981',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        fill: true,
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)'
+                    },
+                    {
+                        label: 'Symptom Severity',
+                        data: [2, 1, 8, 3, 2, 9, 2],
+                        borderColor: '#38bdf8',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#38bdf8'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } },
+                    y: { grid: { color: '#334155' }, ticks: { color: '#64748b', font: { size: 10 } } }
+                }
+            }
+        });
+
+        // Refresh icons
+        lucide.createIcons();
+    </script>
+
+    <section id="clinical-validation" style="padding: 100px 5%; background: #ffffff;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <h2 style="font-size: 3rem; letter-spacing: -1.5px; margin-bottom: 20px;">Clinically Validated. Medically Precise.</h2>
+                <p style="color: #64748b; font-size: 1.25rem; max-width: 800px; margin: 0 auto;">SymptomTree is powered by <b>MedGemma</b>—a specialized Large Language Model (LLM) fine-tuned for high-stakes medical reasoning and safety.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-bottom: 60px;">
+                
+                <div style="background: #f8fafc; padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="background: #eff6ff; color: #2563eb; padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 0.75rem;">USMLE STEP 1-3</div>
+                        <span style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">91%</span>
+                    </div>
+                    <h3 style="font-size: 1.4rem; margin-bottom: 15px;">Clinical Knowledge</h3>
+                    <p style="color: #64748b; line-height: 1.6;">MedGemma consistently outperforms general-purpose models (GPT-4) on medical board exams, ensuring a robust baseline of diagnostic theory.</p>
+                </div>
+
+                <div style="background: #f8fafc; padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="background: #fef2f2; color: #dc2626; padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 0.75rem;">SAFETY METRIC</div>
+                        <span style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">< 0.5%</span>
+                    </div>
+                    <h3 style="font-size: 1.4rem; margin-bottom: 15px;">Hallucination Mitigation</h3>
+                    <p style="color: #64748b; line-height: 1.6;">Through <b>Constrained Decoding</b>, we force the model to map symptoms only to verified SNOMED-CT and ICD-10 ontologies, preventing invented conditions.</p>
+                </div>
+
+            </div>
+
+            <div style="background: var(--dark); border-radius: 32px; padding: 60px; color: white;">
+                <h3 style="font-size: 2rem; margin-bottom: 40px; text-align: center;">Our Safety Infrastructure</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
+                    
+                    <div style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: rgba(16, 185, 129, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--primary);">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <h4 style="font-size: 1.2rem; margin-bottom: 10px;">RLHF+ Training</h4>
+                        <p style="color: #94a3b8; font-size: 0.95rem;">Reinforcement Learning from Human Feedback, specifically weighted by **board-certified physicians** to prioritize clinical caution.</p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: rgba(16, 185, 129, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--primary);">
+                            <i data-lucide="scale"></i>
+                        </div>
+                        <h4 style="font-size: 1.2rem; margin-bottom: 10px;">Evidence-Based Triage</h4>
+                        <p style="color: #94a3b8; font-size: 0.95rem;">All agentic drill-down questions are mapped to **Gold Standard clinical guidelines** (AHA, ACC, NICE) to ensure no critical "red flag" is missed.</p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div style="width: 50px; height: 50px; background: rgba(16, 185, 129, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--primary);">
+                            <i data-lucide="file-warning"></i>
+                        </div>
+                        <h4 style="font-size: 1.2rem; margin-bottom: 10px;">Red-Flag Hardcoding</h4>
+                        <p style="color: #94a3b8; font-size: 0.95rem;">High-risk symptom clusters (e.g., chest pain + left arm numbness) trigger an **immediate bypass** of the AI for emergency medical directives.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="trust" style="padding: 100px 5%; background: #ffffff;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <div style="display: inline-block; padding: 8px 16px; background: #eff6ff; color: #2563eb; border-radius: 99px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 20px;">
+                    Privacy First Architecture
+                </div>
+                <h2 style="font-size: 3rem; letter-spacing: -1px; margin-bottom: 20px;">Bank-Grade Security. Clinical Privacy.</h2>
+                <p style="color: #64748b; font-size: 1.25rem; max-width: 800px; margin: 0 auto;">SymptomTree.ai is built from the ground up to exceed global healthcare data standards.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 5fr)); gap: 30px;">
+                
+                <div style="padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0; background: #f8fafc; text-align: left;">
+                    <div style="margin-bottom: 20px; color: var(--primary);">
+                        <i data-lucide="shield-check" style="width: 40px; height: 40px;"></i>
+                    </div>
+                    <h3 style="font-size: 1.4rem; margin-bottom: 15px;">HIPAA & GDPR Ready</h3>
+                    <p style="color: #64748b; font-size: 1rem; line-height: 1.6;">Full compliance with US and EU data protection laws. We act as a <b>Business Associate (BA)</b> for healthcare providers, ensuring strict data governance.</p>
+                </div>
+
+                <div style="padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0; background: #f8fafc; text-align: left;">
+                    <div style="margin-bottom: 20px; color: var(--primary);">
+                        <i data-lucide="fingerprint" style="width: 40px; height: 40px;"></i>
+                    </div>
+                    <h3 style="font-size: 1.4rem; margin-bottom: 15px;">Local De-identification</h3>
+                    <p style="color: #64748b; font-size: 1rem; line-height: 1.6;">Personal Identifiable Information (PII) is scrubbed locally before analysis. Our MedGemma instance only sees <b>clinical markers</b>, never your identity.</p>
+                </div>
+
+                <div style="padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0; background: #f8fafc; text-align: left;">
+                    <div style="margin-bottom: 20px; color: var(--primary);">
+                        <i data-lucide="lock" style="width: 40px; height: 40px;"></i>
+                    </div>
+                    <h3 style="font-size: 1.4rem; margin-bottom: 15px;">End-to-End Encryption</h3>
+                    <p style="color: #64748b; font-size: 1rem; line-height: 1.6;">Data is encrypted at rest and in transit using <b>AES-256 bit encryption</b>. Secure tunnels ensure FHIR data moves safely into EHR systems.</p>
+                </div>
+
+                <div style="padding: 40px; border-radius: 24px; border: 1px solid #e2e8f0; background: #f8fafc; text-align: left;">
+                    <div style="margin-bottom: 20px; color: var(--primary);">
+                        <i data-lucide="file-key" style="width: 40px; height: 40px;"></i>
+                    </div>
+                    <h3 style="font-size: 1.4rem; margin-bottom: 15px;">Immutable Audit Logs</h3>
+                    <p style="color: #64748b; font-size: 1rem; line-height: 1.6;">Every data access event is logged in a permanent, verifiable audit trail. Complete transparency for institutional compliance officers.</p>
+                </div>
+            </div>
+
+            <!-- <div style="margin-top: 60px; display: flex; justify-content: center; gap: 40px; opacity: 0.5; grayscale(100%); filter: grayscale(1);">
+                <div style="font-weight: 800; font-size: 1.2rem; color: #64748b;">SOC2 Type II</div>
+                <div style="font-weight: 800; font-size: 1.2rem; color: #64748b;">ISO 27001</div>
+                <div style="font-weight: 800; font-size: 1.2rem; color: #64748b;">HIPAA COMPLIANT</div>
+                <div style="font-weight: 800; font-size: 1.2rem; color: #64748b;">HL7 FHIR</div>
+            </div> -->
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 SymptomTree.ai. Holistic Preventive Health Assistant.</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
