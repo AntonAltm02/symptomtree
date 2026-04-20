@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>SymptomSense MVP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --emerald-900: #064e3b;
+            --emerald-600: #059669;
+            --emerald-500: #10b981;
+            --emerald-50: #ecfdf5;
+            --dark-surface: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --radius: 20px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            line-height: 1.6;
+            padding-bottom: 100px;
+        }
+
+        /* --- Pitch Header --- */
+        .hero-header {
+            background: linear-gradient(135deg, var(--emerald-900) 0%, #065f46 100%);
+            padding: 60px 24px 40px;
+            color: white;
+            border-radius: 0 0 30px 30px;
+            text-align: center;
+        }
+
+        .hero-header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .hero-header p { opacity: 0.8; font-size: 14px; }
+
+        /* --- Section Management --- */
+        .section { display: none; padding: 20px; animation: slideUp 0.4s ease; }
+        .section.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Cards --- */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card-title { font-weight: 700; font-size: 18px; margin-bottom: 16px; color: var(--emerald-900); }
+
+        /* --- AI Intake Interface --- */
+        .ai-box {
+            background: var(--emerald-50);
+            border: 2px solid var(--emerald-500);
+            border-radius: 16px;
+            padding: 16px;
+            width: 100%;
+            min-height: 120px;
+            font-family: inherit;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary {
+            background: var(--emerald-600);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:active { transform: scale(0.98); }
+
+        /* --- Biometric Chip --- */
+        .biometric-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            padding: 8px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--emerald-600);
+            border: 1px solid var(--emerald-500);
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--dark-surface);
+            border-radius: 25px;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .nav-item {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .nav-item.active { color: var(--emerald-500); }
+        .nav-icon { font-size: 20px; }
+
+        /* --- AI Response --- */
+        .ai-result {
+            background: #f8fafc;
+            border-left: 4px solid var(--emerald-500);
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 0 12px 12px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero-header">
+        <h1>SymptomSense</h1>
+        <p id="currentDate"></p>
+    </header>
+
+    <div id="sec-intake" class="section active">
+        <div class="biometric-status">
+            <span>⌚ Apple Watch Connected</span>
+            <span style="opacity: 0.5;">|</span>
+            <span id="liveHR">HRV: 52ms</span>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Describe your symptoms</h2>
+            <textarea id="narrativeInput" class="ai-box" placeholder="e.g., I have a sharp pain in my lower back that started after lifting a box..."></textarea>
+            <button class="btn-primary" onclick="analyzeNarrative()" id="actionBtn">Analyze Symptoms</button>
+        </div>
+
+        <div id="analysisResult" style="display: none;">
+            <div class="card">
+                <h3 class="card-title">AI Analysis</h3>
+                <div id="aiSummary" class="ai-result"></div>
+                <div id="parsedSymptomsList" style="margin-top: 15px;"></div>
+                <button class="btn-primary" style="margin-top:15px; background: #064e3b;" onclick="confirmSymptom()">Confirm & Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sec-dash" class="section">
+        <div class="card">
+            <h2 class="card-title">Condition Trend</h2>
+            <canvas id="trendChart" height="200"></canvas>
+        </div>
+        <div class="card">
+            <h2 class="card-title">Clinical Export</h2>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Securely export your data for your physician.</p>
+            <button class="btn-primary" style="background: #1e293b;" onclick="exportFHIR()">Download FHIR R4 Bundle</button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="showSec('intake')">
+            <span class="nav-icon">✨</span>
+            <span>Intake</span>
+        </div>
+        <div class="nav-item" onclick="showSec('dash')">
+            <span class="nav-icon">📊</span>
+            <span>History</span>
+        </div>
+    </nav>
+
+    <script>
+        let currentSymptomData = null;
+
+        // --- Init ---
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+        function showSec(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('sec-' + id).classList.add('active');
+            event.currentTarget.classList.add('active');
+            if(id === 'dash') loadDashboard();
+        }
+
+        // --- AI Logic ---
+        async function analyzeNarrative() {
+            const btn = document.getElementById('actionBtn');
+            const text = document.getElementById('narrativeInput').value;
+            if(!text) return;
+
+            btn.innerText = "Analyzing...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/ai/parse', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        message: text,
+                        biometrics: { hrv: 52, rhr: 68 } // Simulated Wearable Data
+                    })
+                });
+                
+                const data = await response.json();
+                currentSymptomData = data.parsed_symptoms[0];
+                
+                document.getElementById('aiSummary').innerText = data.summary;
+                document.getElementById('analysisResult').style.display = 'block';
+                document.getElementById('parsedSymptomsList').innerHTML = `
+                    <div style="background: white; border: 1px solid #ddd; padding: 12px; border-radius: 12px;">
+                        <strong>Detected:</strong> ${currentSymptomData.symptom_name}<br>
+                        <strong>Severity:</strong> ${currentSymptomData.severity}/10<br>
+                        <strong>Location:</strong> ${currentSymptomData.location || 'Not specified'}
+                    </div>
+                `;
+            } catch (e) {
+                alert("Error connecting to AI backend. Ensure main.py is running.");
+            } finally {
+                btn.innerText = "Analyze Symptoms";
+                btn.disabled = false;
+            }
+        }
+
+        async function confirmSymptom() {
+            if(!currentSymptomData) return;
+            await fetch('/api/symptoms', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({...currentSymptomData, source: 'ai_narrative'})
+            });
+            alert("Symptom saved to clinical record!");
+            document.getElementById('analysisResult').style.display = 'none';
+            document.getElementById('narrativeInput').value = '';
+        }
+
+        // --- Charting ---
+        async function loadDashboard() {
+            const res = await fetch('/api/symptoms/stats');
+            const data = await res.json();
+            
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.trend.map(d => d.date),
+                    datasets: [{
+                        label: 'Severity Score',
+                        data: data.trend.map(d => d.avg_sev),
+                        borderColor: '#10b981',
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)'
+                    }]
+                }
+            });
+        }
+
+        function exportFHIR() {
+            alert("Generating FHIR R4 JSON Bundle for clinician...");
+            // Logic to trigger JSON download
+        }
+    </script>
+</body>
+</html>
